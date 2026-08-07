@@ -41,8 +41,8 @@ npm run dev
 
 | 이름 | 필수 | 용도 | 예시 |
 |---|---:|---|---|
-| `SITE_URL` | 배포 시 필수 | canonical, Open Graph, RSS, sitemap, robots에 사용하는 공개 원점 URL | `https://blog.example.com` |
-| `CONTACT_EMAIL` | 배포 시 필수 | 소개 페이지에 공개할 연락 이메일 | `hello@example.com` |
+| `SITE_URL` | 배포 시 필수 | canonical, Open Graph, RSS, sitemap, robots에 사용하는 공개 원점 URL | `https://myblog-cloudflare.pages.dev` |
+| `CONTACT_EMAIL` | 배포 시 필수 | 소개 페이지에 공개할 연락 이메일 | `dpnzdy@gmail.com` |
 
 - `SITE_URL`에는 경로를 붙이지 않은 HTTPS 원점만 입력합니다.
 - 값 끝에는 `/`를 붙이지 않는 것을 권장합니다.
@@ -119,8 +119,8 @@ Cloudflare 대시보드에서 다음 순서로 GitHub 저장소를 연결합니�
 환경 변수는 Pages 프로젝트의 **Settings → Variables and Secrets**에서 추가합니다.
 
 ```text
-SITE_URL=https://실제-도메인
-CONTACT_EMAIL=실제-이메일
+SITE_URL=https://myblog-cloudflare.pages.dev
+CONTACT_EMAIL=dpnzdy@gmail.com
 ```
 
 환경 변수를 변경한 뒤에는 새 배포를 실행해야 정적 HTML에 반영됩니다. `main`에 push하면 프로덕션이 자동 배포되고, 다른 브랜치와 Pull Request는 미리보기 배포로 확인할 수 있습니다.
@@ -171,7 +171,7 @@ Cloudflare 공식 문서:
 - [ ] 모바일 Lighthouse에서 Performance, Accessibility, Best Practices, SEO를 확인했다.
 - [ ] 실제 Android Chrome 또는 iOS Safari에서 대표 페이지를 확인했다.
 - [ ] 브라우저 콘솔 오류와 깨진 외부 링크가 없다.
-- [ ] 배포 후 canonical, RSS, sitemap에 `example.com`이 남아 있지 않다.
+- [ ] 배포 후 canonical, RSS, sitemap이 `myblog-cloudflare.pages.dev`를 사용한다.
 
 ## 프로젝트 구조
 

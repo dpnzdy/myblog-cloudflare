@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 
 const posts = defineCollection({
   loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string().min(1),
     description: z.string().min(1),
     publishedAt: z.coerce.date(),
@@ -15,6 +15,9 @@ const posts = defineCollection({
     tags: z.array(z.string()).default([]),
     contentType: z.enum(['article', 'tutorial', 'review', 'comparison']),
     summary: z.string().min(1),
+    heroImage: image().optional(),
+    heroAlt: z.string().min(1).optional(),
+    heroCaption: z.string().min(1).optional(),
     featured: z.boolean().default(false),
     testedOn: z.array(z.string()).default([]),
     disclosure: z.object({
@@ -24,6 +27,9 @@ const posts = defineCollection({
       provider: z.string().optional(),
     }),
   }).refine(
+    ({ heroImage, heroAlt }) => !heroImage || Boolean(heroAlt),
+    { message: 'heroImage가 있으면 heroAlt가 필요합니다.' },
+  ).refine(
     ({ publishedAt, updatedAt }) => !updatedAt || updatedAt >= publishedAt,
     { message: 'updatedAt은 publishedAt보다 빠를 수 없습니다.' },
   ).refine(

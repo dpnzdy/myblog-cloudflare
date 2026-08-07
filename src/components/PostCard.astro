@@ -1,12 +1,25 @@
 ---
 import type { Post } from '../lib/content';
 import { categoryNames, formatDate, postUrl } from '../lib/content';
+import { Image } from 'astro:assets';
 
 interface Props { post: Post }
 const { post } = Astro.props;
 ---
 
 <article class="post-card">
+  {post.data.heroImage && post.data.heroAlt && (
+    <a class="post-card-image" href={postUrl(post)} aria-label={`${post.data.title} 글 읽기`}>
+      <Image
+        src={post.data.heroImage}
+        alt={post.data.heroAlt}
+        widths={[360, 560, 760]}
+        sizes="(max-width: 42rem) calc(100vw - 3rem), (max-width: 64rem) calc(50vw - 2rem), 23rem"
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+  )}
   <div class="post-meta">
     <a class="category-pill" href={`/categories/${post.data.category}/`}>
       {categoryNames[post.data.category]}
