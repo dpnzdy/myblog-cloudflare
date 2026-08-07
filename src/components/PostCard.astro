@@ -1,0 +1,21 @@
+---
+import type { Post } from '../lib/content';
+import { categoryNames, formatDate, postUrl } from '../lib/content';
+
+interface Props { post: Post }
+const { post } = Astro.props;
+---
+
+<article class="post-card">
+  <div class="post-meta">
+    <a class="category-pill" href={`/categories/${post.data.category}/`}>
+      {categoryNames[post.data.category]}
+    </a>
+    <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+  </div>
+  <h2><a href={postUrl(post)}>{post.data.title}</a></h2>
+  <p>{post.data.description}</p>
+  <ul class="tag-list" aria-label="태그">
+    {post.data.tags.map((tag) => <li><a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a></li>)}
+  </ul>
+</article>

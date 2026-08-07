@@ -1,0 +1,30 @@
+---
+const pathname = Astro.url.pathname;
+const links = [
+  { href: '/posts/', label: '전체 글' },
+  { href: '/categories/ubuntu/', label: 'Ubuntu' },
+  { href: '/categories/python/', label: 'Python' },
+  { href: '/categories/codex/', label: 'Codex' },
+  { href: '/search/', label: '검색' },
+  { href: '/about/', label: '소개' },
+];
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="기술 생활 기록 홈">
+      <span aria-hidden="true">⌁</span> 기술 생활 기록
+    </a>
+    <nav aria-label="주요 메뉴">
+      <ul>
+        {links.map((link) => (
+          <li>
+            <a href={link.href} aria-current={pathname.startsWith(link.href) ? 'page' : undefined}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

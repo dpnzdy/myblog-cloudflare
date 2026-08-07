@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { categoryNames, getPublishedPosts } from '../lib/content';
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="검색" description="블로그의 글을 제목, 설명, 카테고리, 태그로 검색합니다." noindex>
+  <div class="section-shell page-header search-header">
+    <p class="eyebrow">SEARCH</p><h1>검색</h1><p>제목, 설명, 카테고리, 태그에서 찾아봅니다.</p>
+    <label class="search-box"><span class="sr-only">검색어</span><input id="search-input" type="search" placeholder="예: Ubuntu, Python, Codex" autocomplete="off" /><span aria-hidden="true">⌕</span></label>
+    <p id="search-status" class="search-status" aria-live="polite">검색어를 입력하면 {posts.length}개 글에서 찾아봅니다.</p>
+  </div>
+  <section id="search-results" class="section-shell post-grid search-results" aria-label="검색 결과">
+    {posts.map((post) => <div class="search-item" data-search={`${post.data.title} ${post.data.description} ${categoryNames[post.data.category]} ${post.data.tags.join(' ')}`.toLocaleLowerCase('ko')}><PostCard post={post} /></div>)}
+  </section>
+  <script>
+    const input = document.querySelector<HTMLInputElement>('#search-input');
+    const status = document.querySelector<HTMLElement>('#search-status');
+    const items = [...document.querySelectorAll<HTMLElement>('.search-item')];
+    const update = () => {
+      const query = input?.value.trim().toLocaleLowerCase('ko') ?? '';
+      let count = 0;
+      items.forEach((item) => {
+        const matched = !query || (item.dataset.search ?? '').includes(query);
+        item.hidden = !matched;
+        if (matched) count += 1;
+      });
+      if (status) status.textContent = query ? `“${input?.value.trim()}” 검색 결과 ${count}개` : `검색어를 입력하면 ${items.length}개 글에서 찾아봅니다.`;
+    };
+    input?.addEventListener('input', update);
+    const query = new URLSearchParams(window.location.search).get('q');
+    if (input && query) { input.value = query; update(); }
+  </script>
+</BaseLayout>

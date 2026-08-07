@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getPublishedPosts, type Post } from '../../lib/content';
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  return tags.map((tag) => ({ params: { tag }, props: { tag, posts: posts.filter((p) => p.data.tags.includes(tag)) } }));
+}
+interface Props { tag: string; posts: Post[] }
+const { tag, posts } = Astro.props;
+---
+<BaseLayout title={`#${tag}`} description={`${tag} 태그가 붙은 기술 글을 모았습니다.`} noindex={posts.length < 2}>
+  <div class="section-shell page-header"><p class="eyebrow">TAG</p><h1>#{tag}</h1><p>{posts.length}개의 글이 있습니다.</p></div>
+  <section class="section-shell section-block"><PostList posts={posts} /></section>
+</BaseLayout>

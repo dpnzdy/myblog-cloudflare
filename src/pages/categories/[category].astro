@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { categoryNames, getPublishedPosts, type Category, type Post } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return Object.entries(categoryNames).map(([category, name]) => ({
+    params: { category }, props: { category: category as Category, name, posts: posts.filter((p) => p.data.category === category) },
+  }));
+}
+interface Props { category: Category; name: string; posts: Post[] }
+const { name, posts } = Astro.props;
+---
+<BaseLayout title={name} description={`${name} 관련 실전 가이드와 리뷰를 모았습니다.`} noindex={posts.length === 0}>
+  <div class="section-shell page-header"><p class="eyebrow">CATEGORY</p><h1>{name}</h1><p>{name} 관련 실전 가이드와 직접 확인한 기록입니다.</p></div>
+  <section class="section-shell section-block" aria-label={`${name} 게시물`}><PostList posts={posts} /></section>
+</BaseLayout>

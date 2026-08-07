@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getPublishedPosts } from '../../lib/content';
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout title="전체 글" description="IT 제품 리뷰와 Ubuntu, Python, Codex에 관한 모든 글을 최신순으로 확인하세요.">
+  <div class="section-shell page-header">
+    <p class="eyebrow">ALL POSTS</p>
+    <h1>전체 글</h1>
+    <p>직접 테스트하고 정리한 {posts.length}개의 기술 기록입니다.</p>
+  </div>
+  <section class="section-shell section-block" aria-label="게시물 목록"><PostList posts={posts} /></section>
+</BaseLayout>
