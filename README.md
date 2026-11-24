@@ -51,6 +51,16 @@ npm run dev
 
 [Google 소유권 확인](https://support.google.com/webmasters/answer/9008080?hl=ko) · [Google 사이트맵 보고서](https://support.google.com/webmasters/answer/7451001?hl=ko) · [Bing 소유권 확인](https://www.bing.com/webmasters/help/add-and-verify-site-12184f8b) · [네이버 소유권 확인](https://searchadvisor.naver.com/guide/faq-start-register)
 
+### 등록 기록 · 2026-11-25 (KST)
+
+세 도구에서 블로그 소유권을 확인하고, 공개 URL 52개가 담긴 사이트맵을 제출했습니다. 아래는 제출 당시 확인한 상태입니다.
+
+| 검색 도구 | 사이트맵 상태 |
+| --- | --- |
+| Google Search Console | 제출 접수. 보고서에 ‘가져올 수 없음’이 표시됐으며, 사이트맵 XML의 실제 URL 테스트에서는 가져오기에 성공했습니다. |
+| Bing Webmaster Tools | 제출 목록에 등록돼 `Processing`으로 표시됐습니다. |
+| 네이버 서치어드바이저 | 브라우저에서 보안문자 확인 후 소유권 확인을 완료했습니다. 제출 목록에서 `sitemap.xml`과 등록일을 확인했습니다. |
+
 ## 글 발행
 
 원고는 `src/content/blog/<언어>/<원고명>.md`에 있습니다. 개별 글은 검수가 끝난 언어부터 발행할 수 있습니다.
