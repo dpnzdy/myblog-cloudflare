@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import { existsSync } from 'node:fs';
 import { loadEnvFile } from 'node:process';
+import { siteVerification } from './search-verification.mjs';
 
 const envFile = new URL('.env', import.meta.url);
 if (existsSync(envFile)) loadEnvFile(envFile);
@@ -12,18 +13,20 @@ const pagesHost = env.CF_PAGES_URL?.match(/^https:\/\/(?:[a-z0-9-]+\.)?([a-z0-9-
 const origin = env.SITE_URL || (pagesProduction && pagesHost ? `https://${pagesHost}` : undefined);
 const analyticsUrl = env.PUBLIC_UMAMI_SCRIPT_URL;
 const analyticsId = env.PUBLIC_UMAMI_WEBSITE_ID;
-const searchVerification = {
-  'google-site-verification': env.GOOGLE_SITE_VERIFICATION?.trim(),
-  'msvalidate.01': env.BING_SITE_VERIFICATION?.trim(),
-  'naver-site-verification': env.NAVER_SITE_VERIFICATION?.trim(),
-};
 
-if (origin) {
-  const url = new URL(origin);
+const url = origin ? new URL(origin) : undefined;
+if (url) {
   if (url.protocol !== 'https:' || url.pathname !== '/' || url.search || url.hash || url.username || url.password) {
     throw new Error('SITE_URL must be an HTTPS origin without a path.');
   }
 }
+
+const verificationDefaults = url?.origin === siteVerification.origin ? siteVerification : {};
+const searchVerification = {
+  'google-site-verification': env.GOOGLE_SITE_VERIFICATION?.trim() ?? verificationDefaults.google,
+  'msvalidate.01': env.BING_SITE_VERIFICATION?.trim() ?? verificationDefaults.bing,
+  'naver-site-verification': env.NAVER_SITE_VERIFICATION?.trim() ?? verificationDefaults.naver,
+};
 
 if (Boolean(analyticsUrl) !== Boolean(analyticsId) || (analyticsUrl && new URL(analyticsUrl).protocol !== 'https:')) {
   throw new Error('Set both Umami variables and use an HTTPS script URL.');
@@ -38,8 +41,8 @@ export default defineConfig({
     define: {
       __BLOCK_INDEXING__: JSON.stringify(preview || !origin),
       __SEARCH_VERIFICATION__: JSON.stringify(searchVerification),
-      __ANALYTICS__: JSON.stringify(!preview && origin && analyticsUrl && analyticsId
-        ? { url: analyticsUrl, id: analyticsId, domain: new URL(origin).hostname }
+      __ANALYTICS__: JSON.stringify(!preview && url && analyticsUrl && analyticsId
+        ? { url: analyticsUrl, id: analyticsId, domain: url.hostname }
         : null),
     },
   },
