@@ -1,0 +1,15 @@
+---
+import { categoryName, copy } from '../lib/copy';
+import { blogPath, categories, topicPath, type Category, type Language } from '../lib/site';
+
+interface Props { lang: Language; selected?: Category; includeAll?: boolean }
+const { lang, selected, includeAll } = Astro.props;
+const t = copy[lang];
+---
+<nav class="topics" aria-label={t.topics}>
+  {includeAll && <a class:list={['chip', { active: !selected }]} aria-current={!selected ? 'page' : undefined} href={blogPath(lang)}>{t.all}</a>}
+  {categories.map((category) => (
+    <a class:list={['chip', { active: selected === category }]} aria-current={selected === category ? 'page' : undefined}
+      href={topicPath(lang, category)}>{categoryName(lang, category)}</a>
+  ))}
+</nav>

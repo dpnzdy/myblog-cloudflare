@@ -1,0 +1,23 @@
+---
+import BlogIndex from '../../../../components/BlogIndex.astro';
+import { publishedPosts } from '../../../../lib/posts';
+import { categories, languages, topicPath, type LanguageLinks } from '../../../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await publishedPosts();
+  return categories.flatMap((topic) => {
+    const matches = posts.filter(({ data }) => data.category === topic);
+    const alternates: LanguageLinks = Object.fromEntries(
+      matches.map(({ data }) => [data.lang, topicPath(data.lang, topic)]),
+    );
+    return languages.map((lang) => ({
+      params: { lang, topic },
+      props: { posts: matches.filter(({ data }) => data.lang === lang), alternates },
+    }));
+  });
+}
+
+const { lang, topic } = Astro.params;
+const { posts, alternates } = Astro.props;
+---
+<BlogIndex {lang} {posts} {topic} {alternates} />

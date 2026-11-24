@@ -1,0 +1,23 @@
+---
+import { categoryName } from '../lib/copy';
+import { postImages, type Post } from '../lib/posts';
+import { articlePath } from '../lib/site';
+import PostMeta from './PostMeta.astro';
+
+interface Props { post: Post; heading?: 'h2' | 'h3'; eager?: boolean }
+const { post, heading: Heading = 'h3', eager = false } = Astro.props;
+const { data } = post;
+const image = postImages[data.image];
+---
+<article class="post-card">
+  <a class="card-link" href={articlePath(data.lang, data.slug)} aria-labelledby={`title-${data.slug}`}>
+    <img class:list={['card-image', { 'card-image-editor': data.image === 'editor' }]}
+      src={image.path} width={image.width} height={image.height} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    <div class="card-body">
+      <span class="category-label">{categoryName(data.lang, data.category)}</span>
+      <Heading id={`title-${data.slug}`}>{data.title}</Heading>
+      <p>{data.description}</p>
+      <PostMeta post={post} />
+    </div>
+  </a>
+</article>

@@ -1,0 +1,134 @@
+---
+import '@fontsource-variable/dm-sans';
+import '@fontsource-variable/newsreader';
+import '../styles/site.css';
+import { copy } from '../lib/copy';
+import { appPath, blogPath, brand, defaultLanguage, homePath, languageNames, languages, type Language, type LanguageLinks } from '../lib/site';
+
+interface Props {
+  lang: Language;
+  title: string;
+  description: string;
+  path: string;
+  alternates: LanguageLinks;
+  section?: 'blog' | 'app';
+  image?: string;
+  imageAlt?: string;
+  indexable?: boolean;
+  article?: { published: Date; updated?: Date };
+}
+
+const { lang, title, description, path, alternates, section, image = '/images/hero.webp',
+  imageAlt, indexable = true, article } = Astro.props;
+const t = copy[lang];
+const pageTitle = title === brand ? brand : `${title} | ${brand}`;
+const site = Astro.site;
+const canonical = site ? new URL(path, site) : undefined;
+const openGraphImage = site ? new URL(image, site) : undefined;
+const noIndex = __BLOCK_INDEXING__ || !indexable;
+const articleData = article && canonical && openGraphImage ? {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  inLanguage: lang,
+  mainEntityOfPage: canonical.href,
+  image: openGraphImage.href,
+  datePublished: article.published.toISOString().slice(0, 10),
+  dateModified: (article.updated ?? article.published).toISOString().slice(0, 10),
+  author: { '@type': 'Organization', name: t.author, url: new URL(appPath(lang), site).href },
+  publisher: { '@type': 'Organization', name: 'ZINNIASHARK' },
+} : undefined;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fbf8f2" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/webp" href="/images/app-icon.webp" />
+    {noIndex && <meta name="robots" content="noindex, follow" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    {site && !noIndex && languages.map((code) => {
+      const url = alternates[code];
+      return url && <link rel="alternate" hreflang={code} href={new URL(url, site)} />;
+    })}
+    {site && !noIndex && alternates[defaultLanguage] && (
+      <link rel="alternate" hreflang="x-default" href={new URL(alternates[defaultLanguage], site)} />
+    )}
+    <meta property="og:site_name" content={brand} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {openGraphImage && <meta property="og:image" content={openGraphImage} />}
+    {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    {__ANALYTICS__ && <script is:inline defer src={__ANALYTICS__.url}
+      data-website-id={__ANALYTICS__.id} data-domains={__ANALYTICS__.domain} />}
+    {articleData && <script type="application/ld+json" set:html={JSON.stringify(articleData).replaceAll('<', '\\u003c')} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.skip}</a>
+    <header class="site-header">
+      <div class="wrap site-bar">
+        <a class="brand" href={homePath(lang)}>
+          <img src="/images/app-icon.webp" width="35" height="35" alt="" />
+          <span>{brand}</span>
+        </a>
+        <nav class="site-nav" aria-label={t.nav}>
+          <a href={blogPath(lang)} aria-current={section === 'blog' ? path === blogPath(lang) ? 'page' : 'location' : undefined}>{t.blog}</a>
+          <a href={appPath(lang)} aria-current={section === 'app' ? 'page' : undefined}
+            data-umami-event={section !== 'app' ? 'app-page-click' : undefined} data-umami-event-language={lang}>{t.app}</a>
+        </nav>
+        <details class="language">
+          <summary aria-label={t.language}>
+            <span class="globe" aria-hidden="true"></span>
+            <span lang={lang}>{languageNames[lang]}</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </summary>
+          <ul aria-label={t.language}>
+            {languages.map((code) => (
+              <li>
+                <a href={alternates[code] ?? blogPath(code)} lang={code} hreflang={code} aria-current={code === lang ? 'page' : undefined}>
+                  {languageNames[code]}
+                  {!alternates[code] && <small lang={lang}>{t.missing}</small>}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      </div>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <div>
+          <a class="brand" href={homePath(lang)}>
+            <img src="/images/app-icon.webp" width="29" height="29" alt="" />
+            <span>{brand}</span>
+          </a>
+          <p>{t.footer}</p>
+        </div>
+        <nav aria-label={t.nav}>
+          <a href={blogPath(lang)}>{t.blog}</a>
+          <a href={appPath(lang)}>{t.app}</a>
+        </nav>
+      </div>
+    </footer>
+    <script>
+      const picker = document.querySelector<HTMLDetailsElement>('.language');
+      document.addEventListener('click', (event) => {
+        if (picker?.open && event.target instanceof Node && !picker.contains(event.target)) picker.open = false;
+      });
+      picker?.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && picker.open) {
+          picker.open = false;
+          picker.querySelector('summary')?.focus();
+        }
+      });
+    </script>
+  </body>
+</html>

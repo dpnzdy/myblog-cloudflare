@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { copy } from '../lib/copy';
+import { allLanguages, blogPath } from '../lib/site';
+
+const t = copy.en;
+---
+<Layout lang="en" title={t.notFound} description={t.notFound} path="/404/" alternates={allLanguages(blogPath)} indexable={false}>
+  <div class="wrap collection">
+    <header class="collection-heading"><h1>{t.notFound}</h1></header>
+    <a class="button" href={blogPath('en')}>{t.browse}</a>
+  </div>
+</Layout>

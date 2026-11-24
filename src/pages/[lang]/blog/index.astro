@@ -1,0 +1,14 @@
+---
+import BlogIndex from '../../../components/BlogIndex.astro';
+import { localPosts, publishedPosts } from '../../../lib/posts';
+import { languages } from '../../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await publishedPosts();
+  return languages.map((lang) => ({ params: { lang }, props: { posts: localPosts(posts, lang) } }));
+}
+
+const { lang } = Astro.params;
+const { posts } = Astro.props;
+---
+<BlogIndex {lang} {posts} />

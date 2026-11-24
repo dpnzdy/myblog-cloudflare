@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PostCard from './PostCard.astro';
+import Topics from './Topics.astro';
+import { categoryName, copy } from '../lib/copy';
+import type { Post } from '../lib/posts';
+import { allLanguages, blogPath, topicPath, type Category, type Language, type LanguageLinks } from '../lib/site';
+
+interface Props { lang: Language; posts: Post[]; topic?: Category; alternates?: LanguageLinks }
+const { lang, posts, topic, alternates = allLanguages(blogPath) } = Astro.props;
+const t = copy[lang];
+const title = topic ? categoryName(lang, topic) : t.all;
+---
+<Layout {lang} {title} {alternates} description={topic ? `${title} · ${t.blogIntro}` : t.blogIntro} section="blog"
+  indexable={!topic || posts.length > 0} path={topic ? topicPath(lang, topic) : blogPath(lang)}>
+  <div class="wrap collection">
+    <header class="collection-heading">
+      <h1>{title}</h1>
+      {!topic && <p>{t.blogIntro}</p>}
+    </header>
+    <Topics {lang} selected={topic} includeAll />
+    {posts.length ? (
+      <section aria-label={title} class="post-grid">
+        {posts.map((post, index) => <PostCard {post} heading="h2" eager={index < 3} />)}
+      </section>
+    ) : (
+      <div class="empty-state">
+        <p>{t.coming}</p>
+        <a class="text-link" href={blogPath(lang)}>{t.allGuides}</a>
+      </div>
+    )}
+  </div>
+</Layout>

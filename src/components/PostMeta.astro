@@ -1,0 +1,15 @@
+---
+import { copy } from '../lib/copy';
+import type { Post } from '../lib/posts';
+import { formatDate } from '../lib/site';
+
+interface Props { post: Post; expanded?: boolean }
+const { post: { data }, expanded = false } = Astro.props;
+const t = copy[data.lang];
+---
+<div class="post-meta">
+  {expanded && <span>{t.author}</span>}
+  <time datetime={data.published.toISOString().slice(0, 10)}>{formatDate(data.published, data.lang)}</time>
+  <span>{data.minutes}{t.minute}</span>
+  {expanded && data.updated && <span>{t.updated} <time datetime={data.updated.toISOString().slice(0, 10)}>{formatDate(data.updated, data.lang)}</time></span>}
+</div>

@@ -1,0 +1,68 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import AppPromo from '../../../components/AppPromo.astro';
+import PostCard from '../../../components/PostCard.astro';
+import PostMeta from '../../../components/PostMeta.astro';
+import { categoryName, copy } from '../../../lib/copy';
+import { localPosts, postImages, publishedPosts, translationsFor } from '../../../lib/posts';
+import { articlePath, blogPath, topicPath } from '../../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await publishedPosts();
+  return posts.map((post) => {
+    const { lang, slug, translationKey, category } = post.data;
+    const otherPosts = localPosts(posts, lang).filter(({ id }) => id !== post.id);
+    const related = [
+      ...otherPosts.filter(({ data }) => data.category === category),
+      ...otherPosts.filter(({ data }) => data.category !== category),
+    ].slice(0, 2);
+    return { params: { lang, slug }, props: { post, related, alternates: translationsFor(posts, translationKey) } };
+  });
+}
+
+const { post, related, alternates } = Astro.props;
+const { lang, slug, category, title, description, image, imageAlt, showApp } = post.data;
+const t = copy[lang];
+const cover = postImages[image];
+const { Content, headings } = await render(post);
+const sections = headings.filter(({ depth }) => depth === 2);
+---
+<Layout {lang} {title} {description} {alternates} path={articlePath(lang, slug)} image={cover.path} {imageAlt}
+  article={post.data} section="blog">
+  <div class="wrap article-wrap">
+    <article>
+      <header class="article-heading">
+        <nav class="breadcrumbs" aria-label={t.topics}>
+          <a href={blogPath(lang)}>{t.blog}</a>
+          <span aria-hidden="true">/</span>
+          <a href={topicPath(lang, category)}>{categoryName(lang, category)}</a>
+        </nav>
+        <h1>{title}</h1>
+        <p class="article-deck">{description}</p>
+        <PostMeta {post} expanded />
+      </header>
+      <figure class="article-cover">
+        <img class:list={[{ 'article-image-editor': image === 'editor' }]} src={cover.path} width={cover.width}
+          height={cover.height} alt={imageAlt} fetchpriority="high" decoding="async" />
+        {image === 'editor' && <figcaption>{t.editorLabel}</figcaption>}
+      </figure>
+      <div class="article-main">
+        {sections.length > 2 && (
+          <nav class="article-toc" aria-label={t.contents}>
+            <p>{t.contents}</p>
+            <ul>{sections.map(({ slug, text }) => <li><a href={`#${slug}`}>{text}</a></li>)}</ul>
+          </nav>
+        )}
+        <div class="prose"><Content /></div>
+        {showApp && <AppPromo {lang} />}
+      </div>
+    </article>
+    {related.length > 0 && (
+      <section class="related" aria-labelledby="related-title">
+        <div class="section-heading"><h2 id="related-title">{t.related}</h2></div>
+        <div class="post-grid">{related.map((entry) => <PostCard post={entry} />)}</div>
+      </section>
+    )}
+  </div>
+</Layout>

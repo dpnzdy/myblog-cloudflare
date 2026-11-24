@@ -1,0 +1,17 @@
+---
+import { copy } from '../lib/copy';
+import { appPath, brand, type Language } from '../lib/site';
+
+interface Props { lang: Language }
+const { lang } = Astro.props;
+const t = copy[lang];
+---
+<aside class="app-promo" aria-label={brand}>
+  <img src="/images/app-icon.webp" width="54" height="54" alt="" loading="lazy" />
+  <div>
+    <h2>{t.productTitle}</h2>
+    <p>{t.productBody}</p>
+  </div>
+  <a class="button button-outline" href={appPath(lang)} data-umami-event="app-page-click"
+    data-umami-event-language={lang}>{t.app}</a>
+</aside>
