@@ -40,4 +40,7 @@ export const postImages = {
   rtf: { path: '/images/rtf.webp', width: 960, height: 640 },
   offline: { path: '/images/offline.webp', width: 960, height: 640 },
   editor: { path: '/images/app-editor.webp', width: 1600, height: 1000 },
+  password: { path: '/images/password.webp', width: 960, height: 640 },
+  multimedia: { path: '/images/multimedia.webp', width: 960, height: 640 },
+  privacy: { path: '/images/privacy.webp', width: 960, height: 640 },
 };

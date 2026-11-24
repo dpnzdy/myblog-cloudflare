@@ -6,7 +6,10 @@ const envFile = new URL('.env', import.meta.url);
 if (existsSync(envFile)) loadEnvFile(envFile);
 const env = process.env;
 const preview = Boolean(env.CF_PAGES_BRANCH && env.CF_PAGES_BRANCH !== 'main');
-const origin = env.SITE_URL;
+const pagesProduction = env.CF_PAGES === '1' && env.CF_PAGES_BRANCH === 'main';
+// A deployment URL may have a hash prefix. Index the stable project hostname.
+const pagesHost = env.CF_PAGES_URL?.match(/^https:\/\/(?:[a-z0-9-]+\.)?([a-z0-9-]+\.pages\.dev)\/?$/i)?.[1];
+const origin = env.SITE_URL || (pagesProduction && pagesHost ? `https://${pagesHost}` : undefined);
 const analyticsUrl = env.PUBLIC_UMAMI_SCRIPT_URL;
 const analyticsId = env.PUBLIC_UMAMI_WEBSITE_ID;
 

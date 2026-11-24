@@ -161,6 +161,7 @@ figcaption { color: var(--muted); font-size: .84rem; margin-top: 7px; }
 .article-toc ul { padding-left: 20px; margin: 6px 0 0; }
 .article-toc a, .prose a { color: var(--accent-dark); text-underline-offset: 3px; }
 .prose { font-size: 1.06rem; line-height: 1.75; overflow-wrap: anywhere; }
+:lang(ko) .prose { word-break: keep-all; }
 .prose h2 {
   font: 610 clamp(1.53rem, 3.05vw, 2rem)/1.18 var(--serif);
   letter-spacing: -.033em; margin-block: 1.5em .3em; scroll-margin-top: 16px;

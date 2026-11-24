@@ -26,9 +26,9 @@ npm run dev
 | Build command | `npm run build` |
 | Build output directory | `dist` |
 | Node.js | `24` · 저장소의 `.node-version`에도 지정 |
-| Production 환경 변수 | `SITE_URL`에 실제 HTTPS 공개 주소 입력 |
+| Production 환경 변수 | 커스텀 도메인을 사용하면 `SITE_URL`에 실제 HTTPS 공개 주소 입력 |
 
-`SITE_URL`에는 경로 없이 최종 공개 주소를 넣습니다. 커스텀 도메인을 연결하기 전에는 프로덕션에 할당된 `*.pages.dev` 주소를 사용할 수 있습니다. 주소를 바꾼 뒤에는 다시 빌드합니다. 공개 주소가 없거나 배포 브랜치가 `main`이 아닌 빌드에는 `noindex`가 적용됩니다. 공개 도메인에서 `/robots.txt`와 `/sitemap.xml`을 확인한 다음, Google Search Console에서 도메인을 인증하고 사이트맵을 제출합니다.
+`SITE_URL`에는 경로 없이 최종 공개 주소를 넣습니다. 비워 두면 Cloudflare Pages의 `main` 배포에서는 프로젝트의 기본 `*.pages.dev` 주소가 사용됩니다. 주소를 바꾼 뒤에는 다시 빌드합니다. 공개 주소가 없거나 배포 브랜치가 `main`이 아닌 빌드에는 `noindex`가 적용됩니다. 공개 도메인에서 `/robots.txt`와 `/sitemap.xml`을 확인한 다음, Google Search Console에서 도메인을 인증하고 사이트맵을 제출합니다.
 
 [Cloudflare Pages의 Astro 배포 안내](https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/) · [Cloudflare Pages Git 연동](https://developers.cloudflare.com/pages/get-started/git-integration/)
 
@@ -51,13 +51,16 @@ npm run dev
 
 ## 이미지
 
-앱 아이콘과 Windows 1.0.2 화면은 [기존 공식 제품 사이트](https://dpnzdy.github.io/ZinniaSharkNote/)의 공개 제품 자료입니다. 편집용 표지 세 개는 기본 이미지 생성 도구로 제작했습니다.
+앱 아이콘과 Windows 1.0.2 화면은 [기존 공식 제품 사이트](https://dpnzdy.github.io/ZinniaSharkNote/)의 공개 제품 자료입니다. 편집용 표지는 기본 이미지 생성 도구로 제작했습니다.
 
 | 파일 | 생성 지시 요약 |
 | --- | --- |
 | `public/images/hero.webp` | 진한 적색 배경과 크림색 책상 위의 노트북, 일반 문서가 표시된 은색 노트북 컴퓨터, 인쇄물 질감의 편집 일러스트 |
 | `public/images/rtf.webp` | 장밋빛 배경 위의 크림색 문서와 버건디 폴더, 금속 종이 클립을 위에서 본 편집 사진 |
 | `public/images/offline.webp` | 청록색 책상과 노트 위의 휴대용 SSD, 느슨하게 감긴 빨간 케이블을 위에서 본 편집 사진 |
+| `public/images/password.webp` | 버건디색 책상, 종이 더미와 황동 자물쇠 |
+| `public/images/multimedia.webp` | 슬레이트색 책상, 프로젝트 문서와 해안 사진, 유선 이어폰 |
+| `public/images/privacy.webp` | 크림색 책상, 종이 폴더를 담은 올리브색 파일 보관함 |
 
 <details>
 <summary>이미지 생성에 사용한 프롬프트</summary>
@@ -73,5 +76,17 @@ npm run dev
 **오프라인 백업 글 표지**
 
 > Wide 3:2 editorial cover for a private offline note backup article. Compact matte black portable SSD with neat red cable loosely coiled on top of a stack of pale cream handwritten-looking abstract note pages on a muted blue-green teal desktop, shot from above in striking angled afternoon light, minimalist tactile still-life photographic magazine editorial, understated print grain, strong neat central composition. No readable text, lettering, logos, or watermarks.
+
+**개인 노트 비밀번호 표지**
+
+> Wide 3:2 premium editorial still-life photo for a Windows notes blog article about password protecting one private note. On muted burgundy red desk, a short stack of cream archive paper with subtle dark horizontal rules (no readable text), a compact brass padlock resting naturally across the lower corner and throwing an angled shadow. Top-down, realistic matte textures, warm raking daylight, quiet modern European editorial print mood, delicate film grain, bold yet minimal geometry, the lock and paper centered in the middle two thirds for narrow horizontal crops. Nothing else, no type, no logo, no watermark, no frame.
+
+**멀티미디어 문서 표지**
+
+> Wide 3:2 premium editorial still-life photo for a Windows writing blog article about combining text, photographs, audio and video. On a washed dark slate-blue desktop, one warm cream printed project sheet with abstract charcoal paragraph rules, two small overlapping prints of a coastline, wired silver earbuds with neat loop, and a pencil. Top-down tactile photographic studio with strong diagonal afternoon shadows, quiet red accent only, modern print-magazine look with slight grain. Keep the three key objects near the center horizontally, composition uncluttered. No readable typography, logos, human hands, or watermark.
+
+**로컬 저장과 개인정보 표지**
+
+> Wide 3:2 premium editorial still-life photo for a Windows note-taking blog about choosing who has a copy of local documents. Close three-quarter view of a compact olive-green metal desktop filing box with an open lid and a few cream folders, at the center of a warm ivory desk with bold afternoon shadows. One small deep red document tab, understated real material textures, minimal premium editorial photography with a grainy print feel. Frame the box at the center and keep the scene calm. No writing, numbers, logos, people, watermark, or frame.
 
 </details>

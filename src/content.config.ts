@@ -20,7 +20,7 @@ const blog = defineCollection({
     published: z.coerce.date(),
     updated: z.coerce.date().optional(),
     minutes: z.number().int().positive(),
-    image: z.enum(['rtf', 'offline', 'editor']),
+    image: z.enum(['rtf', 'offline', 'editor', 'password', 'multimedia', 'privacy']),
     imageAlt: z.string().min(1),
     showApp: z.boolean().default(false),
     draft: z.boolean().default(false),
