@@ -28,9 +28,28 @@ npm run dev
 | Node.js | `24` · 저장소의 `.node-version`에도 지정 |
 | Production 환경 변수 | 커스텀 도메인을 사용하면 `SITE_URL`에 실제 HTTPS 공개 주소 입력 |
 
-`SITE_URL`에는 경로 없이 최종 공개 주소를 넣습니다. 비워 두면 Cloudflare Pages의 `main` 배포에서는 프로젝트의 기본 `*.pages.dev` 주소가 사용됩니다. 주소를 바꾼 뒤에는 다시 빌드합니다. 공개 주소가 없거나 배포 브랜치가 `main`이 아닌 빌드에는 `noindex`가 적용됩니다. 공개 도메인에서 `/robots.txt`와 `/sitemap.xml`을 확인한 다음, Google Search Console에서 도메인을 인증하고 사이트맵을 제출합니다.
+`SITE_URL`에는 경로 없이 최종 공개 주소를 넣습니다. 비워 두면 Cloudflare Pages의 `main` 배포에서는 프로젝트의 기본 `*.pages.dev` 주소가 사용됩니다. 주소를 바꾼 뒤에는 다시 빌드합니다. 공개 주소가 없거나 배포 브랜치가 `main`이 아닌 빌드에는 `noindex`가 적용됩니다.
 
 [Cloudflare Pages의 Astro 배포 안내](https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/) · [Cloudflare Pages Git 연동](https://developers.cloudflare.com/pages/get-started/git-integration/)
+
+## 검색 도구 연결
+
+현재 공개 주소는 `https://myblog-cloudflare.pages.dev/`입니다. Google Search Console에서는 이 주소를 URL 접두어 속성으로 추가합니다. Bing과 네이버도 같은 호스트를 사용합니다. 발급된 태그에서 `content` 값만 Cloudflare Pages 프로젝트의 **Production** 환경 변수에 넣습니다.
+
+| 검색 도구 | 환경 변수 | HTML 메타태그 이름 |
+| --- | --- | --- |
+| Google Search Console | `GOOGLE_SITE_VERIFICATION` | `google-site-verification` |
+| Bing Webmaster Tools | `BING_SITE_VERIFICATION` | `msvalidate.01` |
+| 네이버 서치어드바이저 | `NAVER_SITE_VERIFICATION` | `naver-site-verification` |
+
+설정한 태그는 공개 빌드의 언어별 홈에 렌더링됩니다. 설정이 비어 있는 도구의 태그와 미리보기 빌드의 태그는 출력되지 않습니다. Bing에서 Google 속성을 가져와 확인한 경우 Bing 변수는 비워 둘 수 있습니다.
+
+1. 환경 변수를 저장한 뒤 프로덕션을 다시 배포합니다.
+2. 블로그 루트가 연결되는 [영어 홈](https://myblog-cloudflare.pages.dev/en/)의 HTML 소스에서 발급된 태그를 확인하고, 각 도구에서 소유권 확인을 완료합니다.
+3. [공개 사이트맵](https://myblog-cloudflare.pages.dev/sitemap.xml)을 제출하고, 처리 상태와 발견된 URL을 확인합니다.
+4. Search Console의 URL 검사에 [RTF 글](https://myblog-cloudflare.pages.dev/ko/blog/open-rtf-windows-11/), [오프라인 백업 글](https://myblog-cloudflare.pages.dev/en/blog/offline-notes-backup/), [문서 암호 글](https://myblog-cloudflare.pages.dev/ko/blog/password-protect-personal-notes/) 등 대표 주소를 넣습니다. 실제 URL 테스트에서 가져오기 상태를, URL 검사 결과에서 Google이 선택한 대표 주소와 색인 여부를 확인합니다.
+
+[Google 소유권 확인](https://support.google.com/webmasters/answer/9008080?hl=ko) · [Google 사이트맵 보고서](https://support.google.com/webmasters/answer/7451001?hl=ko) · [Bing 소유권 확인](https://www.bing.com/webmasters/help/add-and-verify-site-12184f8b) · [네이버 소유권 확인](https://searchadvisor.naver.com/guide/faq-start-register)
 
 ## 글 발행
 

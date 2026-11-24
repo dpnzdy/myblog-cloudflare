@@ -9,7 +9,7 @@ import { allLanguages, blogPath, topicPath, type Category, type Language, type L
 interface Props { lang: Language; posts: Post[]; topic?: Category; alternates?: LanguageLinks }
 const { lang, posts, topic, alternates = allLanguages(blogPath) } = Astro.props;
 const t = copy[lang];
-const title = topic ? categoryName(lang, topic) : t.all;
+const title = topic ? categoryName(lang, topic) : t.blogTitle;
 ---
 <Layout {lang} {title} {alternates} description={topic ? `${title} · ${t.blogIntro}` : t.blogIntro} section="blog"
   indexable={!topic || posts.length > 0} path={topic ? topicPath(lang, topic) : blogPath(lang)}>

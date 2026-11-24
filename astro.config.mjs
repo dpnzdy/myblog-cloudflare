@@ -12,6 +12,11 @@ const pagesHost = env.CF_PAGES_URL?.match(/^https:\/\/(?:[a-z0-9-]+\.)?([a-z0-9-
 const origin = env.SITE_URL || (pagesProduction && pagesHost ? `https://${pagesHost}` : undefined);
 const analyticsUrl = env.PUBLIC_UMAMI_SCRIPT_URL;
 const analyticsId = env.PUBLIC_UMAMI_WEBSITE_ID;
+const searchVerification = {
+  'google-site-verification': env.GOOGLE_SITE_VERIFICATION?.trim(),
+  'msvalidate.01': env.BING_SITE_VERIFICATION?.trim(),
+  'naver-site-verification': env.NAVER_SITE_VERIFICATION?.trim(),
+};
 
 if (origin) {
   const url = new URL(origin);
@@ -32,6 +37,7 @@ export default defineConfig({
   vite: {
     define: {
       __BLOCK_INDEXING__: JSON.stringify(preview || !origin),
+      __SEARCH_VERIFICATION__: JSON.stringify(searchVerification),
       __ANALYTICS__: JSON.stringify(!preview && origin && analyticsUrl && analyticsId
         ? { url: analyticsUrl, id: analyticsId, domain: new URL(origin).hostname }
         : null),

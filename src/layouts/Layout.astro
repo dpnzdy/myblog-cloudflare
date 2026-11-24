@@ -50,6 +50,9 @@ const articleData = article && canonical && openGraphImage ? {
     <meta name="description" content={description} />
     <link rel="icon" type="image/webp" href="/images/app-icon.webp" />
     {noIndex && <meta name="robots" content="noindex, follow" />}
+    {!noIndex && path === homePath(lang) && Object.entries(__SEARCH_VERIFICATION__).map(([name, content]) =>
+      content && <meta {name} {content} />
+    )}
     {canonical && <link rel="canonical" href={canonical} />}
     {site && !noIndex && languages.map((code) => {
       const url = alternates[code];
