@@ -49,6 +49,8 @@ npm run dev
 3. [공개 사이트맵](https://myblog-cloudflare.pages.dev/sitemap.xml)을 제출하고, 처리 상태와 발견된 URL을 확인합니다.
 4. Search Console의 URL 검사에 [RTF 글](https://myblog-cloudflare.pages.dev/ko/blog/open-rtf-windows-11/), [오프라인 백업 글](https://myblog-cloudflare.pages.dev/en/blog/offline-notes-backup/), [문서 암호 글](https://myblog-cloudflare.pages.dev/ko/blog/password-protect-personal-notes/) 등 대표 주소를 넣습니다. 실제 URL 테스트에서 가져오기 상태를, URL 검사 결과에서 Google이 선택한 대표 주소와 색인 여부를 확인합니다.
 
+Google에서 XML 처리 상태를 비교할 때는 같은 대표 URL 목록에서 생성되는 [텍스트 사이트맵](https://myblog-cloudflare.pages.dev/sitemap.txt)을 추가로 제출할 수 있습니다.
+
 [Google 소유권 확인](https://support.google.com/webmasters/answer/9008080?hl=ko) · [Google 사이트맵 보고서](https://support.google.com/webmasters/answer/7451001?hl=ko) · [Bing 소유권 확인](https://www.bing.com/webmasters/help/add-and-verify-site-12184f8b) · [네이버 소유권 확인](https://searchadvisor.naver.com/guide/faq-start-register)
 
 ### 등록 기록 · 2026-11-25 (KST)
